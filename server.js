@@ -2,8 +2,8 @@ var express = require('express');
 var builder = require('botbuilder');
 var server = express();
 var chatConnector = new builder.ChatConnector({
-    appId: f7a635cc-9266-429e-9970-9f0098c051ca,
-    appPassword: 5kmOEq5SonkO2MMMgve40Xq
+    appId:"f7a635cc-9266-429e-9970-9f0098c051ca",
+    appPassword:"5kmOEq5SonkO2MMMgve40Xq"
 });
 var bot = new builder.UniversalBot(chatConnector);
 bot.dialog('/', function(session){
