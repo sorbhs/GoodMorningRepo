@@ -7,7 +7,7 @@ var chatConnector = new builder.ChatConnector({
 });
 var bot = new builder.UniversalBot(chatConnector);
 bot.dialog('/', function(session){
-    session.send("hello world");
+    session.send("hello wo");
 });
 server.post('/api/messages', chatConnector.listen());
 server.use('/', express.static('docs'));
