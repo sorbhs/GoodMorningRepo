@@ -1,7 +1,7 @@
 var express = require('express');
 var builder = require('botbuilder');
 
-var nlpModel = "";
+var nlpModel = "https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/71e63b48-fba5-4dca-81d0-104e9332e55a?subscription-key=a1cc90607c97440bad93c1ef0336a7fa&timezoneOffset=0&verbose=true&q=";
 var recognizer = new builder.LuisRecognizer(nlpModel);
 var intent = new builder.IntentDialog({recognizers: [recognizer]});
 
