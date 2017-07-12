@@ -13,9 +13,11 @@ var chatConnector = new builder.ChatConnector({
     appPassword:"5kmOEq5SonkO2MMMgve40Xq"
 });
 
+var bot = new builder.UniversalBot(chatConnector);
 // Setup bot and root waterfall
 
-var bot = new builder.UniversalBot(chatConnector, [
+
+bot.dialog('/', [
     function (session) {
         builder.Prompts.text(session, "Hello... What's your name?");
     },
