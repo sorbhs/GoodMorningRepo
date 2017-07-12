@@ -1,6 +1,6 @@
 var express = require('express');
 var builder = require('botbuilder');
-var server = restify.createServer();
+var server = express();
 
 server.listen(process.env.port || process.env.PORT || 3978, function () {
     console.log('Server is listening..');
@@ -23,7 +23,7 @@ function sendProactiveMessage(address) {
 }
 
 var savedAddress;
-server.post('/api/messages', connector.listen());
+server.post('/api/messages', chatConnector.listen());
 
 // Do GET this endpoint to delivey a notification
 server.get('/api/CustomWebApi', (req, res, next) => {
