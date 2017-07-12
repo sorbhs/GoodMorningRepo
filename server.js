@@ -6,6 +6,9 @@ var recognizer = new builder.LuisRecognizer(nlpModel);
 var intent = new builder.IntentDialog({recognizers: [recognizer]});
 
 
+
+var introduction = require('./intents/introduction');
+
 var server = express();
 var chatConnector = new builder.ChatConnector({
     appId:"f7a635cc-9266-429e-9970-9f0098c051ca",
@@ -19,9 +22,7 @@ intent.matches('Greetings', function(session){
 	session.send("Hello User!!");
 });
 
-intent.matches('introduction',function(session){
-	session.send("My name is goodmorning bot!!");
-});
+intent.matches('introduction',function(session){introduction(session, builder)});
 
 intent.onDefault(builder.DialogAction.send("Sorry I dont know that"));
 
