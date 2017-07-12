@@ -6,7 +6,6 @@ var recognizer = new builder.LuisRecognizer(nlpModel);
 var intent = new builder.IntentDialog({recognizers: [recognizer]});
 
 
-
 var server = express();
 var chatConnector = new builder.ChatConnector({
     appId:"f7a635cc-9266-429e-9970-9f0098c051ca",
@@ -16,7 +15,7 @@ var bot = new builder.UniversalBot(chatConnector);
 bot.dialog('/',intent);
 
 
-intent.matches('Greeting', function(session){
+intent.matches('Greetings', function(session){
 	session.send("Hello User!!");
 });
 
@@ -25,8 +24,6 @@ intent.matches('introduction',function(session){
 });
 
 intent.onDefault(builder.DialogAction.send("Sorry I dont know that"));
-
-
 
 server.post('/api/messages', chatConnector.listen());
 server.use('/', express.static('docs'));
