@@ -1,33 +1,51 @@
 var express = require('express');
 var builder = require('botbuilder');
+var server = restify.createServer();
 
-var nlpModel = "https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/71e63b48-fba5-4dca-81d0-104e9332e55a?subscription-key=a1cc90607c97440bad93c1ef0336a7fa&timezoneOffset=0&verbose=true&q=";
-var recognizer = new builder.LuisRecognizer(nlpModel);
-var intent = new builder.IntentDialog({recognizers: [recognizer]});
+server.listen(process.env.port || process.env.PORT || 3978, function () {
+    console.log('Server is listening..');
+});
 
-
-
-var introduction = require('./intents/introduction');
-
-var server = express();
+// setup bot credentials
 var chatConnector = new builder.ChatConnector({
     appId:"f7a635cc-9266-429e-9970-9f0098c051ca",
     appPassword:"5kmOEq5SonkO2MMMgve40Xq"
 });
+
 var bot = new builder.UniversalBot(chatConnector);
-bot.dialog('/',intent);
 
+// send simple notification
+function sendProactiveMessage(address) {
+  var msg = new builder.Message().address(address);
+  msg.text('Hello, this is a notification');
+  msg.textLocale('en-US');
+  bot.send(msg);
+}
 
-intent.matches('Greetings', function(session){
-	session.send("Hello User!!");
-});
+var savedAddress;
+server.post('/api/messages', connector.listen());
 
-intent.matches('introduction',function(session){introduction(session, builder)});
+// Do GET this endpoint to delivey a notification
+server.get('/api/CustomWebApi', (req, res, next) => {
+    sendProactiveMessage(savedAddress);
+    res.send('triggered');
+    next();
+  }
+);
 
-intent.onDefault(builder.DialogAction.send("Sorry I dont know that"));
+// root dialog
+bot.dialog('/', function(session, args) {
 
-server.post('/api/messages', chatConnector.listen());
-server.use('/', express.static('docs'));
-server.listen(process.env.port || process.env.PORT || 3978, function () {
-    console.log('Server is listening..');
+  savedAddress = session.message.address;
+
+  var message = 'Hello! In a few seconds I\'ll send you a message proactively to demonstrate how bots can initiate messages.';
+  session.send(message);
+  
+  message = 'You can also make me send a message by accessing: ';
+  message += 'http://localhost:' + server.address().port + '/api/CustomWebApi';
+  session.send(message);
+
+  setTimeout(() => {
+   sendProactiveMessage(savedAddress);
+  }, 5000);
 });
