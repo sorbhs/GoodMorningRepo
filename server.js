@@ -16,7 +16,7 @@ var bot = new builder.UniversalBot(chatConnector);
 bot.dialog('/',intent);
 
 
-intent.matches('greeting', function(session){
+intent.matches('Greeting', function(session){
 	session.send("Hello User!!");
 });
 
