@@ -41,7 +41,9 @@ bot.dialog('/', function(session, args) {
   var message = 'Hello! In a few seconds I\'ll send you a message proactively to demonstrate how bots can initiate messages.';
   session.send(message);
   
-  
+  message = 'You can also make me send a message by accessing: ';
+  message += 'http://localhost:' + server.address().port + '/api/CustomWebApi';
+  session.send(message);
 
   setTimeout(() => {
    sendProactiveMessage(savedAddress);
