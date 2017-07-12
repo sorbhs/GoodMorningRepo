@@ -19,6 +19,7 @@ var bot = new builder.UniversalBot(chatConnector);
 
 bot.dialog('/', [
     function (session) {
+      session.send("Hello user !!");
         builder.Prompts.text(session, "Hello... What's your name?");
     },
     function (session, results) {
