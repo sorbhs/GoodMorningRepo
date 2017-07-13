@@ -16,7 +16,7 @@ var task = cron.schedule('* * * * *', function() {
   request("https://goodmorning-app.herokuapp.com/api/CustomWebApi");
 }, false);
  
-task.start();
+task.stop();
 
 // setup bot credentials
 var chatConnector = new builder.ChatConnector({
