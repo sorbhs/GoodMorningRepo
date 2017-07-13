@@ -4,18 +4,19 @@ var cron = require('node-cron');
 var server = express();
 
 
+var request = require("request");
+
+
 server.listen(process.env.port || process.env.PORT || 3978, function () {
     console.log('Server is listening..');
 });
 
-
-/* 
 var task = cron.schedule('* * * * *', function() {
   console.log('immediately started');
+  request("https://goodmorning-app.herokuapp.com/api/CustomWebApi");
 }, false);
  
 task.start();
-*/
 
 // setup bot credentials
 var chatConnector = new builder.ChatConnector({
@@ -52,14 +53,7 @@ bot.dialog('/', function(session, args) {
   var message = 'Hello! In a few seconds I\'ll send you a message proactively to demonstrate how bots can initiate messages.';
   session.send(message);
 
-  /*cron.schedule('* * * * *', function(savedAddress){
-  console.log('running a task every minute');
-  sendProactiveMessage(savedAddress);
-
-});*/
-
-
-  setTimeout(() => {
+   setTimeout(() => {
    sendProactiveMessage(savedAddress);
   }, 5000);
 });
