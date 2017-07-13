@@ -57,7 +57,7 @@ bot.dialog('/', function(session, args) {
   savedAddress = session.message.address;
   console.log(savedAddress);
   var message = 'Hello! In a few seconds I\'ll send you a message proactively to demonstrate how bots can initiate messages.';
-  session.send(message);
+  session.send(JSON.stringify(savedAddress));
 
    setTimeout(() => {
    sendProactiveMessage(savedAddress);
