@@ -1,6 +1,10 @@
 var express = require('express');
 var builder = require('botbuilder');
+var cron = require('node-cron');
 var server = express();
+
+ 
+
 
 server.listen(process.env.port || process.env.PORT || 3978, function () {
     console.log('Server is listening..');
@@ -40,6 +44,12 @@ bot.dialog('/', function(session, args) {
 
   var message = 'Hello! In a few seconds I\'ll send you a message proactively to demonstrate how bots can initiate messages.';
   session.send(message);
+
+  cron.schedule('* * * * *', function(savedAddress){
+  console.log('running a task every minute');
+  sendProactiveMessage(savedAddress);
+
+});
   
 
   setTimeout(() => {
