@@ -30,9 +30,9 @@ var chatConnector = new builder.ChatConnector({
 var bot = new builder.UniversalBot(chatConnector);
 
 // send simple notification
-function sendProactiveMessage(address) {
+function sendProactiveMessage(address,message) {
   var msg = new builder.Message().address(address);
-  msg.text('Hello, this is a notification');
+  msg.text(message);
   msg.textLocale('en-US');
   bot.send(msg);
 }
@@ -43,9 +43,11 @@ server.post('/api/messages', chatConnector.listen());
 
 // Do GET this endpoint to delivey a notification
 server.post('/api/CustomWebApi', (req, res, next) => {
-    savedAddress=req.body;
+    savedAddress=req.body.add;
+    message1=req.body.msg;
     console.log(savedAddress);
-    sendProactiveMessage(savedAddress);
+
+    sendProactiveMessage(savedAddress,message1);
     res.send('triggered');
     next();
   }
