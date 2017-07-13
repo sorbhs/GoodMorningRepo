@@ -3,6 +3,8 @@ var builder = require('botbuilder');
 var cron = require('node-cron');
 var server = express();
 
+var bodyParser = require('body-parser'); 
+
 
 var request = require("request");
 
@@ -11,13 +13,14 @@ server.listen(process.env.port || process.env.PORT || 3978, function () {
     console.log('Server is listening..');
 });
 
+/*
 var task = cron.schedule('* * * * *', function() {
   console.log('immediately started');
   request("https://goodmorning-app.herokuapp.com/api/CustomWebApi");
 }, false);
  
 task.start();
-
+*/
 // setup bot credentials
 var chatConnector = new builder.ChatConnector({
     appId:"f7a635cc-9266-429e-9970-9f0098c051ca",
@@ -35,10 +38,13 @@ function sendProactiveMessage(address) {
 }
 
 var savedAddress;
+server.use(bodyParser.json());
 server.post('/api/messages', chatConnector.listen());
 
 // Do GET this endpoint to delivey a notification
-server.get('/api/CustomWebApi', (req, res, next) => {
+server.post('/api/CustomWebApi', (req, res, next) => {
+    savedAddress=req.body;
+    console.log(savedAddress);
     sendProactiveMessage(savedAddress);
     res.send('triggered');
     next();
@@ -49,7 +55,7 @@ server.get('/api/CustomWebApi', (req, res, next) => {
 bot.dialog('/', function(session, args) {
 
   savedAddress = session.message.address;
-
+  console.log(savedAddress);
   var message = 'Hello! In a few seconds I\'ll send you a message proactively to demonstrate how bots can initiate messages.';
   session.send(message);
 
