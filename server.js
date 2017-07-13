@@ -1,39 +1,48 @@
-
 var express = require('express');
 var builder = require('botbuilder');
 var server = express();
-
 
 server.listen(process.env.port || process.env.PORT || 3978, function () {
     console.log('Server is listening..');
 });
 
+// setup bot credentials
 var chatConnector = new builder.ChatConnector({
     appId:"f7a635cc-9266-429e-9970-9f0098c051ca",
     appPassword:"5kmOEq5SonkO2MMMgve40Xq"
 });
 
 var bot = new builder.UniversalBot(chatConnector);
-// Setup bot and root waterfall
 
+// send simple notification
+function sendProactiveMessage(address) {
+  var msg = new builder.Message().address(address);
+  msg.text('Hello, this is a notification');
+  msg.textLocale('en-US');
+  bot.send(msg);
+}
 
-bot.dialog('/', [
-    function (session) {
-      session.send("Hello user !!");
-        builder.Prompts.text(session, "Hello... What's your name?");
-    },
-    function (session, results) {
-        session.userData.name = results.response;
-        builder.Prompts.number(session, "Hi " + results.response + ", How many years have you been coding?"); 
-    },
-    function (session, results) {
-        session.userData.coding = results.response;
-        builder.Prompts.choice(session, "What language do you code Node using?", ["JavaScript", "CoffeeScript", "TypeScript"]);
-    },
-    function (session, results) {
-        session.userData.language = results.response.entity;
-        session.send("Got it... " + session.userData.name + 
-                     " you've been programming for " + session.userData.coding + 
-                     " years and use " + session.userData.language + ".");
-    }
-]);
+var savedAddress;
+server.post('/api/messages', chatConnector.listen());
+
+// Do GET this endpoint to delivey a notification
+server.get('/api/CustomWebApi', (req, res, next) => {
+    sendProactiveMessage(savedAddress);
+    res.send('triggered');
+    next();
+  }
+);
+
+// root dialog
+bot.dialog('/', function(session, args) {
+
+  savedAddress = session.message.address;
+
+  var message = 'Hello! In a few seconds I\'ll send you a message proactively to demonstrate how bots can initiate messages.';
+  session.send(message);
+  
+
+  setTimeout(() => {
+   sendProactiveMessage(savedAddress);
+  }, 20000);
+});
