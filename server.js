@@ -3,12 +3,19 @@ var builder = require('botbuilder');
 var cron = require('node-cron');
 var server = express();
 
- 
-
 
 server.listen(process.env.port || process.env.PORT || 3978, function () {
     console.log('Server is listening..');
 });
+
+
+/* 
+var task = cron.schedule('* * * * *', function() {
+  console.log('immediately started');
+}, false);
+ 
+task.start();
+*/
 
 // setup bot credentials
 var chatConnector = new builder.ChatConnector({
@@ -45,14 +52,14 @@ bot.dialog('/', function(session, args) {
   var message = 'Hello! In a few seconds I\'ll send you a message proactively to demonstrate how bots can initiate messages.';
   session.send(message);
 
-  cron.schedule('* * * * *', function(savedAddress){
+  /*cron.schedule('* * * * *', function(savedAddress){
   console.log('running a task every minute');
   sendProactiveMessage(savedAddress);
 
-});
-  
+});*/
+
 
   setTimeout(() => {
    sendProactiveMessage(savedAddress);
-  }, 20000);
+  }, 5000);
 });
